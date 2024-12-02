@@ -1,0 +1,23 @@
+#!/bin/bash
+
+# تنظیمات
+channel_name="\e[32mBlackcrow CONFIG\e[0m"  # نام چنل با رنگ سبز
+fixed_ips=("78.157.42.100" "10.202.10.10")   # آی‌پی‌های ثابت
+range_start=$((79 * 256 ** 3 + 192 * 256 ** 2))  # آغاز رنج: 79.192.0.0
+range_end=$((79 * 256 ** 3 + 255 * 256 ** 2 + 256 ** 2 - 1))  # پایان رنج: 79.255.255.255
+
+# تابع تولید آی‌پی‌های رندوم
+generate_random_ips() {
+    count=${1:-10}  # تعداد آی‌پی‌ها (پیش‌فرض: 10)
+    for ((i = 0; i < count; i++)); do
+        octet3=$((RANDOM % 256))
+        octet4=$((RANDOM % 254 + 1))
+        random_ip="79.192.$octet3.$octet4"
+        fixed_ip=${fixed_ips[RANDOM % ${#fixed_ips[@]}]}
+        echo -e "V4. $random_ip\nV4.  $fixed_ip\n$(printf '_%.0s' {1..30})"
+    done
+}
+
+# اجرای برنامه
+echo -e "$channel_name"
+generate_random_ips
